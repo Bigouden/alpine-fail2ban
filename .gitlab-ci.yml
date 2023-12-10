@@ -1,0 +1,39 @@
+---
+include:
+  - project: "Bigouden/gitlab-ci-templates"
+    file: ".gitlab-ci-docker.yml"
+
+.standalone:
+  image:
+    name: $CONTAINER_TEST_IMAGE
+    entrypoint: [""]
+  variables:
+    GIT_STRATEGY: none
+  dependencies: []
+
+stages:
+  - Quality
+  - Security
+  - Build
+  - Test
+  - Inspect
+  - Release
+  - Clean
+
+Socat:
+  stage: Test
+  extends: .standalone
+  script:
+    - "socat -V"
+
+OpenSSH Server:
+  stage: Test
+  extends: .standalone
+  script:
+    - "sshd -V"
+
+Fail2ban:
+  stage: Test
+  extends: .standalone
+  script:
+    - "fail2ban-server --version"
